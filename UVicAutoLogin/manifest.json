@@ -1,0 +1,24 @@
+{
+  "name": "UVic Auto Login",
+  "description": "Stay signed in to UVic services forever - by automating the UVic login process.",
+  "version": "1.1.1",
+  "manifest_version": 3,
+  
+  "content_scripts": [{
+    "matches": ["https://*.uvic.ca/cas/login?*"],
+    "run_at": "document_idle",
+    "js": ["content.js"]
+  }],
+  "permissions": ["storage"],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "/images/uvic_auto_login16.png",
+      "32": "/images/uvic_auto_login32.png",
+      "48": "/images/uvic_auto_login48.png",
+      "128": "/images/uvic_auto_login128.png"
+    }
+  }
+
+}

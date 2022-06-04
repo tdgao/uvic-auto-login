@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="popup.css">
+    <script src="popup.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+
+    <h1 class="title">UVic Auto Login</h1>
+    
+    <div class="content-container current" data-page-id="main">
+      <p>Stay signed in to UVic services continuously - by automating the UVic login process.</p>
+      
+      <div id="extension-status" class="disabled">Auto Login </div>
+
+      <button id="goto-set-up-login">Set-up Auto Login</button>
+      <button id="goto-update-login" class="hidden">Update Login Info</button>
+      <button id="toggle-extension" class="secondary-btn hidden">Toggle Extension</button>
+
+    </div>
+
+    <div class="content-container" data-page-id="login-form">      
+      <label for="username">UVic NetLink ID:</label>
+      <input type="text" id="username" name="username">
+  
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password">
+
+      <input type="checkbox" id="showPS" name="showPS" class="show-ps">
+      <label for="showPS" class="show-ps-label">Show Password</label>
+
+  
+      <div class="buttons-container">
+        <button id="save-login">Save Login</button>
+        <button id="update-login" class="hidden">Update Login</button>
+        <button id="login-form-back-btn" class="secondary-btn">Back</button>
+      </div>
+      <p id="login-set-msg" class="hidden">Login saved! Browser restart recommended.</p>
+    </div>
+
+
+  </body>
+</html>
