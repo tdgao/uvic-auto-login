@@ -5,7 +5,7 @@
   "manifest_version": 3,
   
   "content_scripts": [{
-    "matches": ["https://*.uvic.ca/cas/login?*"],
+    "matches": ["https://www.uvic.ca/cas/login?*"],
     "run_at": "document_idle",
     "js": ["content.js"]
   },

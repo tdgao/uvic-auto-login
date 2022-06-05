@@ -14,6 +14,7 @@ function uvicLogin(username, ps) {
   const psInput = document.querySelector("#password")
   if (psInput) psInput.value = ps;
 
+  // TODO: 2FA handling
   const rememberMe = document.querySelector("#rememberMe")
   if (rememberMe) rememberMe.checked = true;
 

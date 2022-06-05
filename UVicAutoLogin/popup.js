@@ -1,6 +1,6 @@
 // set login info to chrome session storage
 async function setLogin() {
-  const usernameInput = document.getElementById('username');
+  const usernameInput = document.getElementById('username')
   let username = null;
   if (usernameInput) username = usernameInput.value;
 
@@ -43,11 +43,8 @@ function showPS(checkbox){
 
 
 async function toggleExtension(forceToggle = false){
-  let enabled = await chrome.storage.local.get('extensionEnabled');
-  console.log(enabled)
-
-  enabled = enabled["extensionEnabled"];
-  console.log(enabled)
+  const enabledObj = await chrome.storage.local.get('extensionEnabled');
+  const enabled = enabledObj["extensionEnabled"];
 
   // change status
   const status = document.getElementById('extension-status');

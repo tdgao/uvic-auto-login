@@ -1,10 +1,7 @@
-// console.log('setting keep logged in interval')
-// setInterval(function(){
-//   keepMeLoggedInClicked();
-//   console.log('keeping logged in')
-// }, 3000);
+// using following stack overflow guide to inject code into document (to access keepMeLoggedInClicked)
+// https://stackoverflow.com/questions/9515704/use-a-content-script-to-access-the-page-context-variables-and-functions/9517879#9517879
 
-var actualCode = `
+const actualCode = `
 console.log('setting keep logged in interval')
 setInterval(function(){
   keepMeLoggedInClicked();
