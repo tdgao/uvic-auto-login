@@ -5,7 +5,6 @@ async function setLogin() {
   const password = document.getElementById('password').value;
 
   // save login to storage (local disk)
-  console.log('setting to session:', username, password);
   await chrome.storage.local.set({
     'username': username,
     'password': password,
@@ -40,11 +39,8 @@ function showPassword(checkbox){
 
 
 async function toggleExtension(forceToggle = false){
-  let enabled = await chrome.storage.local.get('extensionEnabled');
-  console.log(enabled)
-
-  enabled = enabled["extensionEnabled"];
-  console.log(enabled)
+  const enabledObj = await chrome.storage.local.get('extensionEnabled');
+  const enabled = enabledObj["extensionEnabled"];
 
   // change status
   const status = document.getElementById('extension-status');
