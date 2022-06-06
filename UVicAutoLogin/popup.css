@@ -16,9 +16,12 @@ h1.title{
 p {
   margin: 0;
   margin-top: 10px;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   font-size: 1rem;
   color: #414141;
+}
+p.p-warning{
+  color: hsl(0, 90%, 35%);
 }
 p#login-set-msg{
   font-size: 0.9rem;
