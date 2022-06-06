@@ -1,18 +1,15 @@
-chrome.storage.local.get(['username', 'ps', 'extensionEnabled'], function(login) {
+chrome.storage.local.get(['username', 'password', 'extensionEnabled'], function(login) {
   if (login.extensionEnabled){
-    uvicLogin(login.username, login.ps);
-
+    uvicLogin(login.username, login.password);
   }
 });
 
-
-function uvicLogin(username, ps) {
-  // console.log('logging in with:', username, ps);
-
+function uvicLogin(username, password) {
   const userInput = document.querySelector("#username");
   if (userInput) userInput.value = username;
-  const psInput = document.querySelector("#password")
-  if (psInput) psInput.value = ps;
+
+  const passwordInput = document.querySelector("#password")
+  if (passwordInput) passwordInput.value = password;
 
   // TODO: 2FA handling
   const rememberMe = document.querySelector("#rememberMe")

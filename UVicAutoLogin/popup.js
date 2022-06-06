@@ -1,44 +1,40 @@
 // set login info to chrome session storage
+// assume username and password inputs exist
 async function setLogin() {
-  const usernameInput = document.getElementById('username')
-  let username = null;
-  if (usernameInput) username = usernameInput.value;
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-  const passwordInput = document.getElementById('password');
-  let password = null;
-  if (passwordInput) password = passwordInput.value;
-
-  // writing
-  console.log('setting to session:', username, password);
+  // save login to storage (local disk)
   await chrome.storage.local.set({
     'username': username,
-    'ps': password,
+    'password': password,
     // 'extensionEnabled': false
   });
-
-  return true
 }
 
 
 function goToPage(pageId){
   const page = document.querySelector(`[data-page-id="${pageId}"]`)
   if (!page){
-    console.error('Error, page not found');
+    console.error('Error, page not found by pageId');
     return;
   }
 
-  // remove 'current' tag from all pages & add 'current' to given page
+  // all pages hidden except current
+  // remove 'current' tag from all pages
   document.querySelectorAll('.current[data-page-id]').forEach(page => {
     page.classList.remove('current');
   });
+  // add 'current' to given page
   page.classList.add('current');
 }
 
-//toggle to show/hide password
-function showPS(checkbox){
-  var ps = document.getElementById("password");
-  if (checkbox.checked) ps.type = "text";
-  else ps.type = "password";
+
+//toggle password visibility
+function showPassword(checkbox){
+  var password = document.getElementById("password");
+  if (checkbox.checked) password.type = "text";
+  else password.type = "password";
 }
 
 
@@ -58,7 +54,8 @@ async function toggleExtension(forceToggle = false){
   }
 }
 
-async function to_nonOnboardState(){
+
+async function to_postSetupState(){
   // change all save btns to update btns
   document.getElementById('goto-set-up-login').classList.add('hidden');
   document.getElementById('goto-update-login').classList.remove('hidden');
@@ -70,74 +67,74 @@ async function to_nonOnboardState(){
   document.getElementById('toggle-extension').classList.remove('hidden');
 
   await chrome.storage.local.set({
-    'state': 'nonOnboard'
+    'state': 'postSetup'
   });
 }
 
 
 // event listeners //
-// set/save/update login info, added to both save and update btns
-[document.getElementById('save-login'), document.getElementById('update-login')].forEach(btn => {
-
-  btn.addEventListener('click', () => {
-    setLogin().then( res => {
-      if (!res){
-        console.log('Error, login failed');
-        return;
-      }
+function addListeners(){
+  // set login listener //
+  // add on both save and update login btns
+  const saveLogin = document.getElementById('save-login');
+  const updateLogin = document.getElementById('update-login');
+  [saveLogin, updateLogin].forEach(btn => {
   
-      console.log('login saved');
-      document.getElementById('login-set-msg').classList.remove('hidden'); // show saved! msg
-  
-      // always to non-onboard state
-      to_nonOnboardState();
-        
-      // set extension enabled
-      toggleExtension(true);
+    btn.addEventListener('click', () => {
+      setLogin().then( () => {
+        document.getElementById('login-set-msg').classList.remove('hidden'); // show saved! msg
+    
+        to_postSetupState(); // always to non-onboard state
+        toggleExtension(true); // force extension enabled
+      });
     });
+  
   });
 
-});
+  // show password
+  document.getElementById('showPassword').addEventListener('click', (e) => {
+    showPassword(e.target);
+  });
+
+  // toggle extension
+  document.getElementById('toggle-extension').addEventListener('click', () =>{
+    toggleExtension();
+  });
 
 
+  // page nav listeners //
+  // go to set login page/form
+  document.getElementById('goto-set-up-login').addEventListener('click', () => {
+    goToPage('login-form');
+  });
+  document.getElementById('goto-update-login').addEventListener('click', () => {
+    goToPage('login-form');
+  });
+  // go back to main
+  document.getElementById('login-form-back-btn').addEventListener('click', () => {
+    goToPage('main');
+    document.getElementById('login-set-msg').classList.add('hidden'); // hide login saved msg
+  });
+}
 
-
-// go to set login page
-document.getElementById('goto-set-up-login').addEventListener('click', () => {
-  goToPage('login-form');
-});
-document.getElementById('goto-update-login').addEventListener('click', () => {
-  goToPage('login-form');
-});
-document.getElementById('login-form-back-btn').addEventListener('click', () => {
-  goToPage('main');
-  document.getElementById('login-set-msg').classList.add('hidden'); // hide saved! msg
-});
-
-// toggle extension
-document.getElementById('toggle-extension').addEventListener('click', () =>{
-  toggleExtension();
-});
-
-// show ps
-document.getElementById('showPS').addEventListener('click', (e) => {
-  showPS(e.target);
-});
 
 
 // init
 async function init(){
+  addListeners()
+
   const state = await chrome.storage.local.get('state');
-  if (state.state === 'nonOnboard'){
-    await to_nonOnboardState();
+  if (state.state === 'postSetup'){
+    await to_postSetupState();
+    
+    // setting extension status display to match storage value
+    const enabledObj = await chrome.storage.local.get('extensionEnabled');
+    const enabled = enabledObj["extensionEnabled"];
 
-    // setting extension status - to match storage value
-    let enabled = await chrome.storage.local.get('extensionEnabled');
-    enabled = enabled["extensionEnabled"];
-
-    const status = document.getElementById('extension-status');
-    if (enabled) status.classList.remove('disabled');
-    else status.classList.add('disabled');
+    const statusDiv = document.getElementById('extension-status');
+    if (enabled) statusDiv.classList.remove('disabled');
+    else statusDiv.classList.add('disabled');
   }
+
 }
 init();
